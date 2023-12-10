@@ -84,7 +84,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userSharedFlow.collect {
-                    if (it == null) {
+                    it?.let {
                         binding.tvError.text = AuthErrorMessage.INCORRECT_DATA.msg
                     }
                 }

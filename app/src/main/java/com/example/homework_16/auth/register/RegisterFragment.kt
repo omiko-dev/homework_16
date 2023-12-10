@@ -78,7 +78,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userSharedFlow.collect {
-                    if (it != null) {
+                    it?.let {
                         with(binding) {
                             val email = etEmail.text.toString()
                             val action =

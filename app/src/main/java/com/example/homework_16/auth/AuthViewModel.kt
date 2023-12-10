@@ -20,13 +20,11 @@ class AuthViewModel: ViewModel() {
     fun register(authDto: AuthDto){
         try {
             viewModelScope.launch {
-                val response = AuthNetwork.authService().register(authDto = authDto)
+                val response = AuthNetwork.authService().register(authDto)
                 if(response.isSuccessful){
                     _userShareFlow.emit(response.body())
-                    Log.i("register user", "$_userShareFlow")
                 }else{
                     _userShareFlow.emit(response.body())
-                    Log.i("login user", "$_userShareFlow")
                 }
             }
         }catch (e: Exception){
@@ -41,10 +39,8 @@ class AuthViewModel: ViewModel() {
                 val response = AuthNetwork.authService().login(authDto)
                 if(response.isSuccessful){
                     _userShareFlow.emit(response.body())
-                    Log.i("login user", "$_userShareFlow")
                 }else{
                     _userShareFlow.emit(response.body())
-                    Log.i("login user", "$_userShareFlow")
                 }
             }
         }catch (e: Exception){
