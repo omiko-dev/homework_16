@@ -12,6 +12,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
         goToLogin()
     }
     override fun setUpObserver(){}
+    override fun bind() { }
 
     private fun goToRegister(){
         binding.btnRegister.setOnClickListener {
@@ -22,8 +23,9 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
 
     private fun goToLogin(){
         binding.btnLogin.setOnClickListener {
-            val action = AuthFragmentDirections.actionAuthFragmentToLoginFragment()
+            val action = AuthFragmentDirections.actionAuthFragmentToLoginFragment(null)
             findNavController().navigate(action)
         }
     }
 }
+

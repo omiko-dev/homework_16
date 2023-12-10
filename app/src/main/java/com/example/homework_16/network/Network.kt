@@ -20,6 +20,6 @@ object AuthNetwork {
             ).build()
     }
 
-    fun authService() = retrofit.create(AuthService::class.java)
+    fun authService(): AuthService = retrofit.create(AuthService::class.java)
 
 }

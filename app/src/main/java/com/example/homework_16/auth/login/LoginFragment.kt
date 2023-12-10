@@ -1,11 +1,13 @@
 package com.example.homework_16.auth.login
 
-import android.text.InputType
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.homework_16.BaseFragment
 import com.example.homework_16.auth.AuthViewModel
 import com.example.homework_16.databinding.FragmentLoginBinding
@@ -15,9 +17,9 @@ import kotlinx.coroutines.launch
 
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
-
     private val emailRegex: Regex = Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
     private val viewModel: AuthViewModel by viewModels()
+    private val args: LoginFragmentArgs by navArgs()
 
     override fun listener() {
         showPassword()
@@ -28,13 +30,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         userObserver()
     }
 
+    override fun bind() {
+        binding.etEmail.setText(args.Email)
+    }
+
     private fun showPassword() {
         with(binding) {
             ivEye.setOnClickListener {
-                if (etPassword.inputType == 129) {
-                    etPassword.inputType = InputType.TYPE_CLASS_TEXT
+                if (etPassword.inputType == TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_PASSWORD) {
+                    etPassword.inputType =
+                        TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 } else {
-                    etPassword.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    etPassword.inputType =
+                        TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_PASSWORD
                 }
             }
         }
@@ -51,7 +59,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
                 if (checkValid(authDto)) {
                     viewModel.login(authDto)
-                    findNavController().popBackStack()
                 }
             }
         }

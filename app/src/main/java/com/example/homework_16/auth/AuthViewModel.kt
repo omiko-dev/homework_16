@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.homework_16.dto.AuthDto
 import com.example.homework_16.model.User
 import com.example.homework_16.network.AuthNetwork
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -24,8 +23,10 @@ class AuthViewModel: ViewModel() {
                 val response = AuthNetwork.authService().register(authDto = authDto)
                 if(response.isSuccessful){
                     _userShareFlow.emit(response.body())
+                    Log.i("register user", "$_userShareFlow")
                 }else{
                     _userShareFlow.emit(response.body())
+                    Log.i("login user", "$_userShareFlow")
                 }
             }
         }catch (e: Exception){
@@ -40,8 +41,10 @@ class AuthViewModel: ViewModel() {
                 val response = AuthNetwork.authService().login(authDto)
                 if(response.isSuccessful){
                     _userShareFlow.emit(response.body())
+                    Log.i("login user", "$_userShareFlow")
                 }else{
                     _userShareFlow.emit(response.body())
+                    Log.i("login user", "$_userShareFlow")
                 }
             }
         }catch (e: Exception){

@@ -2,19 +2,19 @@ package com.example.homework_16.auth.register
 
 import android.text.InputType
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.homework_16.BaseFragment
 import com.example.homework_16.auth.AuthViewModel
 import com.example.homework_16.databinding.FragmentRegisterBinding
 import com.example.homework_16.dto.AuthDto
 import com.example.homework_16.service.AuthErrorMessage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
-    private var passwordIsShow: Boolean = true
     private val viewModel: AuthViewModel by viewModels()
     private val emailRegex: Regex = Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
 
@@ -24,18 +24,20 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     override fun setUpObserver() {
-//        TODO("Not yet implemented")
+        userObserver()
     }
+
+    override fun bind() { }
 
     private fun showPassword() {
         with(binding) {
             ivEye.setOnClickListener {
-                if (passwordIsShow) {
-                    etPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                    passwordIsShow = false
+                if (etPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+                    etPassword.inputType =
+                        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 } else {
-                    etPassword.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-                    passwordIsShow = true
+                    etPassword.inputType =
+                        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
             }
         }
@@ -52,7 +54,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
                 if (checkValid(authDto)) {
                     viewModel.register(authDto)
-                    findNavController().popBackStack()
                 }
             }
         }
@@ -70,6 +71,23 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             }
             tvError.text = ""
             return true
+        }
+    }
+
+    private fun userObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userSharedFlow.collect {
+                    if (it != null) {
+                        with(binding) {
+                            val email = etEmail.text.toString()
+                            val action =
+                                RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(email)
+                            findNavController().navigate(action)
+                        }
+                    }
+                }
+            }
         }
     }
 
