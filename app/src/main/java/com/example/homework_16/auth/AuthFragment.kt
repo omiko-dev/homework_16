@@ -11,7 +11,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
         goToRegister()
         goToLogin()
     }
-
+    override fun setUpObserver(){}
 
     private fun goToRegister(){
         binding.btnRegister.setOnClickListener {
@@ -26,9 +26,4 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
             findNavController().navigate(action)
         }
     }
-}
-
-enum class AuthErrorMessage(val message: String){
-    EMPTY_EMAIL("Email Is Empty"),
-    EMPTY_PASSWORD("Password Is Empty")
 }

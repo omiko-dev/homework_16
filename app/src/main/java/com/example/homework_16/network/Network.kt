@@ -1,4 +1,4 @@
-package com.example.homework_16.auth
+package com.example.homework_16.network
 
 import com.example.homework_16.service.AuthService
 import com.squareup.moshi.Moshi
